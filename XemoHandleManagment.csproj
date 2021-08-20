@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="base">
+      <HintPath>..\..\..\..\..\Core\artifacts\Debug\base\base.dll</HintPath>
+    </Reference>
+    <Reference Include="SampleChanger">
+      <HintPath>..\..\..\..\..\Core\artifacts\Debug\SampleChanger\SampleChanger.dll</HintPath>
+    </Reference>
+    <Reference Include="WinFormsTemplates">
+      <HintPath>..\..\..\..\..\Core\artifacts\Debug\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+		<PackageReference Include="NLog" Version="4.7.10" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	</ItemGroup>
+
+
+</Project>
