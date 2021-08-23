@@ -1,23 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Regata.Core.UI.WinForms.Forms;
-using Regata.Core.UI.WinForms.Controls;
-using Regata.Core.UI.WinForms.Items;
-using Regata.Core.UI.WinForms;
-using Regata.Core.Hardware;
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2021, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
 
-namespace XemoHandleManagment
+using Regata.Core.Hardware;
+using Regata.Core.UI.WinForms;
+using Regata.Core.UI.WinForms.Items;
+using Regata.Core.UI.WinForms.Forms;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Regata.Desktop.WinForms.XHM
 {
     enum Devices { D1, D2, D3, D4 }
     public partial class MainForm : RegataBaseForm
     {
+        private static bool  _isInitialized;
+       
         public readonly IReadOnlyDictionary<string, string> Device_SN = new Dictionary<string, string>()
         {
             { "D1", "107374" },
@@ -28,22 +34,34 @@ namespace XemoHandleManagment
 
         SampleChanger _chosenSC;
 
-        EnumItem<Devices> _devices;
-
         public MainForm() : base()
         {
-            InitializeComponent();
-            _devices = new EnumItem<Devices>();
-            MenuStrip.Items.Add(_devices.EnumMenuItem);
-            StatusStrip.Items.Add(_devices.EnumStatusLabel);
+            base.StatusStrip.SizingGrip = false;
+            Size = new Size(800, 700);
+            base.Size = Size;
+            base.MinimumSize = Size;
+            MinimumSize = Size;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
 
+            _devices = new EnumItem<Devices>();
+            base.MenuStrip.Items.Add(_devices.EnumMenuItem);
+            base.StatusStrip.Items.Add(_devices.EnumStatusLabel);
             _devices.CheckedChanged += _devices_CheckedChanged;
 
+            Name = "XemoHandleManagment";
+            base.Name = "XemoHandleManagment";
+            InitializeComponent();
             Labels.SetControlsLabels(this);
+
         }
 
         private void _devices_CheckedChanged()
         {
+
+            if (!_isInitialized)
+                InitializeComponents();
 
             //SerialNumberLabel.Text = Device_SN[_devices.ToString()];
 

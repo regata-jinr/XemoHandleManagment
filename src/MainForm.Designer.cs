@@ -1,4 +1,15 @@
-﻿namespace XemoHandleManagment
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2021, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
+namespace Regata.Desktop.WinForms.XHM
 {
     partial class MainForm
     {
@@ -28,10 +39,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.SuspendLayout();
+            // 
+            // MainForm
+            // 
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            base.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.Name = "MainForm";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion

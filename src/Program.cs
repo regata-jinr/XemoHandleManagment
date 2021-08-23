@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace XemoHandleManagment
+namespace Regata.Desktop.WinForms.XHM
 {
     static class Program
     {

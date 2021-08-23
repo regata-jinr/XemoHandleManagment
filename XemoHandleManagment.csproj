@@ -30,5 +30,11 @@
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="src\MainForm.Moving.cs">
+	    <SubType>Form</SubType>
+	  </Compile>
+	</ItemGroup>
+
 
 </Project>
