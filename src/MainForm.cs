@@ -37,7 +37,7 @@ namespace Regata.Desktop.WinForms.XHM
         public MainForm() : base()
         {
             base.StatusStrip.SizingGrip = false;
-            Size = new Size(800, 700);
+            Size = new Size(1200, 700);
             base.Size = Size;
             base.MinimumSize = Size;
             MinimumSize = Size;
@@ -50,11 +50,21 @@ namespace Regata.Desktop.WinForms.XHM
             base.StatusStrip.Items.Add(_devices.EnumStatusLabel);
             _devices.CheckedChanged += _devices_CheckedChanged;
 
-            Name = "XemoHandleManagment";
-            base.Name = "XemoHandleManagment";
             InitializeComponent();
             Labels.SetControlsLabels(this);
 
+            this.Name = "XemoHandleManagment";
+            base.Name = "XemoHandleManagment";
+            this.Text = "XemoHandleManagment";
+            base.Text = "XemoHandleManagment";
+
+            Load += MainForm_Load;
+
+        }
+
+        private async void MainForm_Load(object sender, System.EventArgs e)
+        {
+            await CheckPositionAsync();
         }
 
         private void _devices_CheckedChanged()
@@ -63,20 +73,19 @@ namespace Regata.Desktop.WinForms.XHM
             if (!_isInitialized)
                 InitializeComponents();
 
-            //SerialNumberLabel.Text = Device_SN[_devices.ToString()];
-
             if (_chosenSC == null)
             {
-                //_chosenSC = new SampleChanger(_devices.ToString());
+                _chosenSC = new SampleChanger(Device_SN[_devices.ToString()]);
             }
             else
             {
-                //_chosenSC.Disconnect();
-                //_chosenSC = new SampleChanger(_devices.ToString());
+                _chosenSC.Disconnect();
+                _chosenSC = new SampleChanger(Device_SN[_devices.ToString()]);
             }
 
-            //_devices.EnumStatusLabel.Name = $"Device:{_devices} | ComPort:{_chosenSC.ComPort} | SN:{_chosenSC.SerialNumber}";
-            //_devices.EnumStatusLabel.Name = $"Device:{_devices}";
+            _stateToolTip.SetToolTip(_indState, _chosenSC.Code.ToString());
+
+            _devices.EnumStatusLabel.Name = $"Device:{_devices} | ComPort:{_chosenSC.ComPort} | SN:{_chosenSC.SerialNumber} | {_chosenSC.Code}";
             Labels.SetControlsLabels(this);
 
         }

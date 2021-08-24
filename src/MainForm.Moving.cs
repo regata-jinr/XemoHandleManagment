@@ -11,9 +11,8 @@
 
 using Regata.Core.UI.WinForms.Forms;
 using Regata.Core.UI.WinForms.Controls;
-using Regata.Core.UI.WinForms.Items;
-using Regata.Core.UI.WinForms;
 using System;
+using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -168,6 +167,21 @@ namespace Regata.Desktop.WinForms.XHM
                 Font = font;
 
             return n;
+        }
+
+        private async Task CheckPositionAsync()
+        {
+            while (true)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1));
+
+                if (_chosenSC == null)
+                    continue;
+
+                _XPositionNumeric.Value = _chosenSC.CurrentPosition.X;
+                _YPositionNumeric.Value = _chosenSC.CurrentPosition.Y;
+                _CPositionNumeric.Value = _chosenSC.CurrentPosition.C;
+            }
         }
 
 

@@ -41,11 +41,15 @@ namespace Regata.Desktop.WinForms.XHM
         private Button _saveButton;
         private ComboBox _saveAsComboBox;
 
+        private ToolTip _stateToolTip;
+
+
         private EnumItem<Devices> _devices;
 
         private void InitializeComponents()
         {
             InitializeMovingComponents();
+
             // _controlButtonsTable
             _controlButtonsTable = new TableLayoutPanel();
             _controlButtonsTable.Dock = DockStyle.Fill;
@@ -99,10 +103,13 @@ namespace Regata.Desktop.WinForms.XHM
             _indNeg = new IndicatorControl() { Name = "IndNegSwitch" };
             _indState = new IndicatorControl() { Name = "IndState" };
 
+
             base.StatusStrip.Items.Add(new ToolStripControlHost(_indState));
             base.StatusStrip.Items.Add(new ToolStripControlHost(_indRef));
             base.StatusStrip.Items.Add(new ToolStripControlHost(_indPos));
             base.StatusStrip.Items.Add(new ToolStripControlHost(_indNeg));
+            
+            _stateToolTip = new ToolTip();
 
             Controls.Add(_mainGroupBox);
 
