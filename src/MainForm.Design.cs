@@ -9,10 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
-using Regata.Core.UI.WinForms.Forms;
+using Regata.Core.UI.WinForms;
 using Regata.Core.UI.WinForms.Controls;
 using Regata.Core.UI.WinForms.Items;
-using Regata.Core.UI.WinForms;
+using Regata.Core.UI.WinForms.Forms;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -43,7 +43,6 @@ namespace Regata.Desktop.WinForms.XHM
 
         private ToolTip _stateToolTip;
 
-
         private EnumItem<Devices> _devices;
 
         private void InitializeComponents()
@@ -61,27 +60,36 @@ namespace Regata.Desktop.WinForms.XHM
             _controlButtonsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             _controlButtonsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
 
-            _haltButton  = CreateButton("haltButton", act: (s, e) => _chosenSC?.HaltSystem());
-            _stopButton  = CreateButton("stopButton", act: (s, e) => _chosenSC?.Stop());
-            _resetButton = CreateButton("resetButton", act: (s, e) => _chosenSC?.Reset());
-            _homeButton  = CreateButton("homeButton", act: (s, e) => _chosenSC?.Home());
+            _haltButton  = CreateButton("haltButton",  act:  (s, e) => _chosenSC?.HaltSystem());
+            _stopButton  = CreateButton("stopButton",  act:  (s, e) => _chosenSC?.Stop());
+            _resetButton = CreateButton("resetButton", act:  (s, e) => _chosenSC?.Reset());
+            _homeButton  = CreateButton("homeButton",  act:  (s, e) => _chosenSC?.Home());
             _saveButton  = CreateButton("saveButton");
 
             // _saveAsComboBox
 
             _saveAsComboBox = new ComboBox();
-            _saveAsComboBox.Items.AddRange(new string[] { "AboveDetectorX", "AboveDiskExternalX", "AboveDiskInternalX", "..." });
+            _saveAsComboBox.Items.AddRange(new string[] {
+                                                            "AboveDetector2p5",
+                                                            "AboveDetector5",
+                                                            "AboveDetector10",
+                                                            "AboveDetector20",
+                                                            "NearDiskCellExternal",
+                                                            "NearDiskCellInternal",
+                                                            "AboveDiskCellExternal",
+                                                            "AboveDiskCellInternal"
+                                                        });
             _saveAsComboBox.SelectedItem = null;
             _saveAsComboBox.SelectedText = "Choose binded position";
             _saveAsComboBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             _saveAsComboBox.AutoSize = true;
 
-            _controlButtonsTable.Controls.Add(_haltButton,0,0  );
-            _controlButtonsTable.Controls.Add(_resetButton, 0,1 );
-            _controlButtonsTable.Controls.Add(_homeButton,1,0);
-            _controlButtonsTable.Controls.Add(_stopButton,1,1  );
+            _controlButtonsTable.Controls.Add(_haltButton,     0, 0);
+            _controlButtonsTable.Controls.Add(_resetButton,    0, 1);
+            _controlButtonsTable.Controls.Add(_homeButton,     1, 0);
+            _controlButtonsTable.Controls.Add(_stopButton,     1, 1);
             _controlButtonsTable.Controls.Add(_saveAsComboBox, 2, 0);
-            _controlButtonsTable.Controls.Add(_saveButton, 2, 1);
+            _controlButtonsTable.Controls.Add(_saveButton,     2, 1);
 
           
             _buttonsGroupBox = new ControlsGroupBox(new Control[] { _controlButtonsTable }, vertical: false) { Name = "buttonsGroupBox", Dock = DockStyle.Fill, Margin = new Padding(0,0,0,20) };
@@ -98,10 +106,10 @@ namespace Regata.Desktop.WinForms.XHM
             _mainGroupBox = new ControlsGroupBox(new Control[] { _mainTable }, vertical: false) { Name = "mainGroupBox", Dock = DockStyle.Fill };
 
             // indicators
-            _indRef = new IndicatorControl() { Name = "IndRefSwitch" };
-            _indPos = new IndicatorControl() { Name = "IndPosSwitch" };
-            _indNeg = new IndicatorControl() { Name = "IndNegSwitch" };
-            _indState = new IndicatorControl() { Name = "IndState" };
+            _indRef = new IndicatorControl()   { Name = "IndRefSwitch" };
+            _indPos = new IndicatorControl()   { Name = "IndPosSwitch" };
+            _indNeg = new IndicatorControl()   { Name = "IndNegSwitch" };
+            _indState = new IndicatorControl() { Name = "IndState"     };
 
 
             base.StatusStrip.Items.Add(new ToolStripControlHost(_indState));

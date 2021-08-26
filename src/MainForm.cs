@@ -24,12 +24,12 @@ namespace Regata.Desktop.WinForms.XHM
     {
         private static bool  _isInitialized;
        
-        public readonly IReadOnlyDictionary<string, string> Device_SN = new Dictionary<string, string>()
+        public readonly IReadOnlyDictionary<string, int> Device_SN = new Dictionary<string, int>()
         {
-            { "D1", "107374" },
-            { "D2", "107375" },
-            { "D3", "107376" },
-            { "D4", "114005" }
+            { "D1", 107374 },
+            { "D2", 107375 },
+            { "D3", 107376 },
+            { "D4", 114005 }
         };
 
         SampleChanger _chosenSC;

@@ -20,28 +20,23 @@ namespace Regata.Desktop.WinForms.XHM
 {
     public partial class MainForm : RegataBaseForm
     {
-        private TrackBar _speedBar;
+        private TrackBar         _speedBar;
         private TableLayoutPanel _controlTable;
-
         private TableLayoutPanel _movingTable;
         private TableLayoutPanel _positionTable;
-
         private ControlsGroupBox _controlGroupBox;
         private ControlsGroupBox _speedGroupBox;
         private ControlsGroupBox _positionGroupBox;
-
-        private Button _rightButton;
-        private Button _leftButton;
-        private Button _upButton;
-        private Button _downButton;
-        private Button _ccwButton;
-        private Button _cwButton;
-
-        private NumericUpDown _XPositionNumeric;
-        private NumericUpDown _YPositionNumeric;
-        private NumericUpDown _CPositionNumeric;
-
-        private ToolTip _speedBarToolTip;
+        private Button           _rightButton;
+        private Button           _leftButton;
+        private Button           _upButton;
+        private Button           _downButton;
+        private Button           _ccwButton;
+        private Button           _cwButton;
+        private NumericUpDown    _XPositionNumeric;
+        private NumericUpDown    _YPositionNumeric;
+        private NumericUpDown    _CPositionNumeric;
+        private ToolTip          _speedBarToolTip;
 
         private void InitializeMovingComponents()
         {
@@ -49,7 +44,7 @@ namespace Regata.Desktop.WinForms.XHM
             // _speedBar
             _speedBar = new TrackBar();
             _speedBar.Maximum = 100;
-            _speedBar.Minimum = 0;
+            _speedBar.Minimum = 1;
             _speedBar.SmallChange = 5;
             _speedBar.LargeChange = 20;
             _speedBar.TickFrequency = 5;
@@ -75,12 +70,12 @@ namespace Regata.Desktop.WinForms.XHM
 
             var f = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
 
-            _rightButton = CreateButton("🞂", act: (s, e) => _chosenSC?.MoveRight());
-            _leftButton  = CreateButton("🞀", act: (s, e) => _chosenSC?.MoveLeft());
-            _upButton    = CreateButton("▲", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, act: (s, e) => _chosenSC?.MoveUp());
-            _downButton  = CreateButton("▼", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, act: (s, e) => _chosenSC?.MoveDown());
-            _ccwButton   = CreateButton("⟲", act: (s, e) => _chosenSC?.MoveСounterclockwise());
-            _cwButton    = CreateButton("⟳", act: (s, e) => _chosenSC?.MoveClockwise());
+            _rightButton = CreateButton("🞂", act: (s, e) => _chosenSC?.MoveRight(_speedBar.Value));
+            _leftButton  = CreateButton("🞀", act: (s, e) => _chosenSC?.MoveLeft(_speedBar.Value));
+            _upButton    = CreateButton("▲", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, act: (s, e) => _chosenSC?.MoveUp(_speedBar.Value));
+            _downButton  = CreateButton("▼", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, act: (s, e) => _chosenSC?.MoveDown(_speedBar.Value));
+            _ccwButton   = CreateButton("⟲", act: (s, e) => _chosenSC?.MoveСounterclockwise(_speedBar.Value));
+            _cwButton    = CreateButton("⟳", act: (s, e) => _chosenSC?.MoveClockwise(_speedBar.Value));
 
             _movingTable.Controls.Add(_upButton,    1, 0);
             _movingTable.Controls.Add(_leftButton,  0, 1);
@@ -116,15 +111,15 @@ namespace Regata.Desktop.WinForms.XHM
             _YPositionNumeric.Minimum = -1000;
             _CPositionNumeric.Minimum = -1000;
 
-            _XPositionNumeric.Value = 77000;
-            _YPositionNumeric.Value = 34000;
-            _CPositionNumeric.Value = 10000;
+            _XPositionNumeric.Value   = 77000;
+            _YPositionNumeric.Value   = 34000;
+            _CPositionNumeric.Value   = 10000;
             
-            _positionTable.Controls.Add(_XPositionNumeric , 1, 0);
-            _positionTable.Controls.Add(_YPositionNumeric , 1, 1);
+            _positionTable.Controls.Add(_XPositionNumeric, 1, 0);
+            _positionTable.Controls.Add(_YPositionNumeric, 1, 1);
             _positionTable.Controls.Add(_CPositionNumeric, 1, 2);
             
-            _speedGroupBox = new ControlsGroupBox(new Control[] { _speedBar }, vertical: false) { Name = "speedGroupBox" };
+            _speedGroupBox    = new ControlsGroupBox(new Control[] { _speedBar },      vertical: false) { Name = "speedGroupBox" };
             _positionGroupBox = new ControlsGroupBox(new Control[] { _positionTable }, vertical: false) { Name = "positionGroupBox" };
 
             // _controlTable
@@ -180,7 +175,7 @@ namespace Regata.Desktop.WinForms.XHM
 
                 _XPositionNumeric.Value = _chosenSC.CurrentPosition.X;
                 _YPositionNumeric.Value = _chosenSC.CurrentPosition.Y;
-                _CPositionNumeric.Value = _chosenSC.CurrentPosition.C;
+                _CPositionNumeric.Value = _chosenSC.CurrentPosition.C.HasValue ? _chosenSC.CurrentPosition.C.Value : 0;
             }
         }
 
