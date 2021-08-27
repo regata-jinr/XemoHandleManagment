@@ -59,7 +59,34 @@ namespace Regata.Desktop.WinForms.XHM
             base.Text = "XemoHandleManagment";
 
             Load += MainForm_Load;
+            KeyPress += MainForm_KeyPress;
 
+            KeyPreview = true;
+            Focus();
+
+        }
+
+        private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
+
+                case (char)Keys.Right:
+                    _rightButton.PerformClick();
+                    break;
+                case (char)Keys.Left:
+                    _leftButton.PerformClick();
+                    break;
+                case (char)Keys.Up:
+                    _upButton.PerformClick();
+                    break;
+                case (char)Keys.Down:
+                    _downButton.PerformClick();
+                    break;
+                default:
+                    _stopButton.PerformClick();
+                    break;
+            }
         }
 
         private async void MainForm_Load(object sender, System.EventArgs e)
@@ -76,18 +103,29 @@ namespace Regata.Desktop.WinForms.XHM
             if (_chosenSC == null)
             {
                 _chosenSC = new SampleChanger(Device_SN[_devices.ToString()]);
+                //_chosenSC.ErrorOccurred += _chosenSC_ErrorOccurred;
             }
             else
             {
+                //_chosenSC.ErrorOccurred -= _chosenSC_ErrorOccurred;
                 _chosenSC.Disconnect();
                 _chosenSC = new SampleChanger(Device_SN[_devices.ToString()]);
+                //_chosenSC.ErrorOccurred += _chosenSC_ErrorOccurred;
+
             }
 
             _stateToolTip.SetToolTip(_indState, _chosenSC.Code.ToString());
 
             _devices.EnumStatusLabel.Name = $"Device:{_devices} | ComPort:{_chosenSC.ComPort} | SN:{_chosenSC.SerialNumber} | {_chosenSC.Code}";
             Labels.SetControlsLabels(this);
+            Focus();
 
+
+        }
+
+        private void _chosenSC_ErrorOccurred(int arg1, int arg2)
+        {
+            MessageBox.Show(caption: $"Error has got from {arg1}", text: $"Error code is {arg2}");
         }
     }
 }

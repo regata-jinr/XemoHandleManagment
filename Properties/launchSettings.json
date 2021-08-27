@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XemoHandleManagment": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

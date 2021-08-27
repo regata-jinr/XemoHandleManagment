@@ -9,12 +9,17 @@
  *                                                                         *
  ***************************************************************************/
 
+using Microsoft.EntityFrameworkCore;
+using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
 using Regata.Core.UI.WinForms;
 using Regata.Core.UI.WinForms.Controls;
 using Regata.Core.UI.WinForms.Items;
 using Regata.Core.UI.WinForms.Forms;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Regata.Desktop.WinForms.XHM
@@ -38,6 +43,9 @@ namespace Regata.Desktop.WinForms.XHM
         private Button _resetButton;
         private Button _homeButton;
 
+        private List<Position> _savedPositions;
+        private Position       _selectedPositions;
+
         private Button _saveButton;
         private ComboBox _saveAsComboBox;
 
@@ -48,6 +56,10 @@ namespace Regata.Desktop.WinForms.XHM
         private void InitializeComponents()
         {
             InitializeMovingComponents();
+            using (var r = new RegataContext())
+            {
+                _savedPositions = r.Positions.AsNoTracking().ToList();
+            }
 
             // _controlButtonsTable
             _controlButtonsTable = new TableLayoutPanel();
@@ -62,27 +74,23 @@ namespace Regata.Desktop.WinForms.XHM
 
             _haltButton  = CreateButton("haltButton",  act:  (s, e) => _chosenSC?.HaltSystem());
             _stopButton  = CreateButton("stopButton",  act:  (s, e) => _chosenSC?.Stop());
+            this.AcceptButton = _homeButton;
+            this.CancelButton = _haltButton;
             _resetButton = CreateButton("resetButton", act:  (s, e) => _chosenSC?.Reset());
             _homeButton  = CreateButton("homeButton",  act:  (s, e) => _chosenSC?.Home());
+
             _saveButton  = CreateButton("saveButton");
+            _saveButton.Click += _saveButton_Click;
 
             // _saveAsComboBox
 
             _saveAsComboBox = new ComboBox();
-            _saveAsComboBox.Items.AddRange(new string[] {
-                                                            "AboveDetector2p5",
-                                                            "AboveDetector5",
-                                                            "AboveDetector10",
-                                                            "AboveDetector20",
-                                                            "NearDiskCellExternal",
-                                                            "NearDiskCellInternal",
-                                                            "AboveDiskCellExternal",
-                                                            "AboveDiskCellInternal"
-                                                        });
+            _saveAsComboBox.Items.AddRange(_savedPositions.Select(p => p.Name).Distinct().ToArray());
             _saveAsComboBox.SelectedItem = null;
             _saveAsComboBox.SelectedText = "Choose binded position";
             _saveAsComboBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             _saveAsComboBox.AutoSize = true;
+            _saveAsComboBox.SelectedIndexChanged += _saveAsComboBox_SelectedIndexChanged;
 
             _controlButtonsTable.Controls.Add(_haltButton,     0, 0);
             _controlButtonsTable.Controls.Add(_resetButton,    0, 1);
@@ -126,6 +134,27 @@ namespace Regata.Desktop.WinForms.XHM
 
         }
 
+        private void _saveButton_Click(object sender, EventArgs e)
+        {
+            if (_selectedPositions == null)
+                return;
+
+            _selectedPositions.X = _chosenSC.CurrentPosition.X;
+            _selectedPositions.Y = _chosenSC.CurrentPosition.Y;
+            _selectedPositions.C = null;
+
+            using (var r = new RegataContext())
+            {
+                r.Positions.Update(_selectedPositions);
+                r.SaveChanges();
+            }
+        }
+
+        private void _saveAsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _selectedPositions = _savedPositions.Where(p => p.Name == _saveAsComboBox.SelectedItem.ToString() && p.SerialNumber == _chosenSC.SerialNumber && p.Detector == _chosenSC.PairedDetector).First();
+        }
+
         private Label CreateLabel(string name, ContentAlignment ca)
         {
             var l = new Label();
@@ -143,7 +172,7 @@ namespace Regata.Desktop.WinForms.XHM
             b.Anchor = anc_style;
             b.AutoSize = true;
             if (act != null)
-                b.Click += act;
+                b.Click += (s,e) => { _chosenSC?.Stop(); act(s,e);};
             if (font != null)
                 Font = font;
 

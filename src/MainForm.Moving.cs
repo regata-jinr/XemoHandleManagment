@@ -103,16 +103,16 @@ namespace Regata.Desktop.WinForms.XHM
             _YPositionNumeric = CreateNumericsUpDown("_YPositionNumeric", font: f);
             _CPositionNumeric = CreateNumericsUpDown("_CPositionNumeric", font: f);
             
-            _XPositionNumeric.Maximum = 77000;
-            _YPositionNumeric.Maximum = 34000;
-            _CPositionNumeric.Maximum = 10000;
+            _XPositionNumeric.Maximum = 79000;
+            _YPositionNumeric.Maximum = 39000;
+            _CPositionNumeric.Maximum = 100000;
 
-            _XPositionNumeric.Minimum = -1000;
-            _YPositionNumeric.Minimum = -1000;
-            _CPositionNumeric.Minimum = -1000;
+            _XPositionNumeric.Minimum = 0;
+            _YPositionNumeric.Minimum = 0;
+            _CPositionNumeric.Minimum = -100000;
 
-            _XPositionNumeric.Value   = 77000;
-            _YPositionNumeric.Value   = 34000;
+            _XPositionNumeric.Value   = 77400;
+            _YPositionNumeric.Value   = 37300;
             _CPositionNumeric.Value   = 10000;
             
             _positionTable.Controls.Add(_XPositionNumeric, 1, 0);
@@ -172,10 +172,27 @@ namespace Regata.Desktop.WinForms.XHM
 
                 if (_chosenSC == null)
                     continue;
+                if (
+                        _chosenSC.CurrentPosition.X >= _XPositionNumeric.Minimum &&
+                        _chosenSC.CurrentPosition.X <= _XPositionNumeric.Maximum
+                    )
+                    _XPositionNumeric.Value = _chosenSC.CurrentPosition.X;
 
-                _XPositionNumeric.Value = _chosenSC.CurrentPosition.X;
-                _YPositionNumeric.Value = _chosenSC.CurrentPosition.Y;
-                _CPositionNumeric.Value = _chosenSC.CurrentPosition.C.HasValue ? _chosenSC.CurrentPosition.C.Value : 0;
+                if (
+                        _chosenSC.CurrentPosition.Y >= _YPositionNumeric.Minimum &&
+                        _chosenSC.CurrentPosition.Y <= _YPositionNumeric.Maximum
+                   )
+                    _YPositionNumeric.Value = _chosenSC.CurrentPosition.Y;
+
+                if (!_chosenSC.CurrentPosition.C.HasValue) continue;
+
+                if (
+                        _chosenSC.CurrentPosition.C.Value >= _CPositionNumeric.Minimum &&
+                        _chosenSC.CurrentPosition.C.Value <= _CPositionNumeric.Maximum
+                    )
+                    _CPositionNumeric.Value = _chosenSC.CurrentPosition.C.Value;
+
+                Focus();
             }
         }
 

@@ -29,6 +29,8 @@ namespace Regata.Desktop.WinForms.XHM
                 components.Dispose();
             }
             base.Dispose(disposing);
+            //_chosenSC.ErrorOccurred -= _chosenSC_ErrorOccurred;
+
         }
 
         #region Windows Form Designer generated code
