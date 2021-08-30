@@ -48,8 +48,13 @@ namespace Regata.Desktop.WinForms.XHM
 
         private Button _saveButton;
         private ComboBox _saveAsComboBox;
+        
+        private Button _putToDiskButton;
+        private NumericUpDown _diskPositionNumeric;
 
         private ToolTip _stateToolTip;
+
+        private Timer _refreshCoordinatesTimer;
 
         private EnumItem<Devices> _devices;
 
@@ -64,10 +69,11 @@ namespace Regata.Desktop.WinForms.XHM
             // _controlButtonsTable
             _controlButtonsTable = new TableLayoutPanel();
             _controlButtonsTable.Dock = DockStyle.Fill;
-            _controlButtonsTable.ColumnCount = 3;
-            _controlButtonsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
-            _controlButtonsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
-            _controlButtonsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
+            _controlButtonsTable.ColumnCount = 4;
+            _controlButtonsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            _controlButtonsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            _controlButtonsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            _controlButtonsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             _controlButtonsTable.RowCount = 2;
             _controlButtonsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             _controlButtonsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -82,6 +88,20 @@ namespace Regata.Desktop.WinForms.XHM
             _saveButton  = CreateButton("saveButton");
             _saveButton.Click += _saveButton_Click;
 
+            var f = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+
+
+            _putToDiskButton = CreateButton("putToDiskButton");
+            _diskPositionNumeric = CreateNumericsUpDown("_diskPositionNumeric", font: f);
+            _diskPositionNumeric.Value = 1;
+            _diskPositionNumeric.Minimum = 1;
+            _diskPositionNumeric.Maximum = 45;
+            _diskPositionNumeric.Increment = 1;
+            _diskPositionNumeric.ReadOnly = false;
+            _diskPositionNumeric.Controls[0].Visible = true;
+            _diskPositionNumeric.VerticalScroll.Visible = true;
+
+
             // _saveAsComboBox
 
             _saveAsComboBox = new ComboBox();
@@ -92,12 +112,14 @@ namespace Regata.Desktop.WinForms.XHM
             _saveAsComboBox.AutoSize = true;
             _saveAsComboBox.SelectedIndexChanged += _saveAsComboBox_SelectedIndexChanged;
 
-            _controlButtonsTable.Controls.Add(_haltButton,     0, 0);
-            _controlButtonsTable.Controls.Add(_resetButton,    0, 1);
-            _controlButtonsTable.Controls.Add(_homeButton,     1, 0);
-            _controlButtonsTable.Controls.Add(_stopButton,     1, 1);
-            _controlButtonsTable.Controls.Add(_saveAsComboBox, 2, 0);
-            _controlButtonsTable.Controls.Add(_saveButton,     2, 1);
+            _controlButtonsTable.Controls.Add(_haltButton,          0, 0);
+            _controlButtonsTable.Controls.Add(_resetButton,         0, 1);
+            _controlButtonsTable.Controls.Add(_homeButton,          1, 0);
+            _controlButtonsTable.Controls.Add(_stopButton,          1, 1);
+            _controlButtonsTable.Controls.Add(_diskPositionNumeric, 2, 0);
+            _controlButtonsTable.Controls.Add(_putToDiskButton,     2, 1);
+            _controlButtonsTable.Controls.Add(_saveAsComboBox,      3, 0);
+            _controlButtonsTable.Controls.Add(_saveButton,          3, 1);
 
           
             _buttonsGroupBox = new ControlsGroupBox(new Control[] { _controlButtonsTable }, vertical: false) { Name = "buttonsGroupBox", Dock = DockStyle.Fill, Margin = new Padding(0,0,0,20) };
@@ -127,11 +149,46 @@ namespace Regata.Desktop.WinForms.XHM
             
             _stateToolTip = new ToolTip();
 
+            _refreshCoordinatesTimer = new Timer();
+            _refreshCoordinatesTimer.Interval = 100;
+            _refreshCoordinatesTimer.Tick += _refreshCoordinatesTimer_Tick;
+            _refreshCoordinatesTimer.Start();
+
             Controls.Add(_mainGroupBox);
 
             Labels.SetControlsLabels(this);
             _isInitialized = true;  
 
+        }
+
+        private void _refreshCoordinatesTimer_Tick(object sender, EventArgs e)
+        {
+            var x = _chosenSC.CurrentPosition.X;
+            var y = _chosenSC.CurrentPosition.Y;
+            var c = _chosenSC.CurrentPosition.C;
+
+
+            if (_chosenSC == null)
+                return;
+            if (
+                    x >= _XPositionNumeric.Minimum &&
+                    x <= _XPositionNumeric.Maximum
+                )
+                _XPositionNumeric.Value = x;
+
+            if (
+                    y >= _YPositionNumeric.Minimum &&
+                    y <= _YPositionNumeric.Maximum
+               )
+                _YPositionNumeric.Value = y;
+
+            if (!_chosenSC.CurrentPosition.C.HasValue) return;
+
+            if (
+                    c.Value >= _CPositionNumeric.Minimum &&
+                    c.Value <= _CPositionNumeric.Maximum
+                )
+                _CPositionNumeric.Value = c.Value;
         }
 
         private void _saveButton_Click(object sender, EventArgs e)
@@ -172,7 +229,13 @@ namespace Regata.Desktop.WinForms.XHM
             b.Anchor = anc_style;
             b.AutoSize = true;
             if (act != null)
-                b.Click += (s,e) => { _chosenSC?.Stop(); act(s,e);};
+                b.Click += (s,e) => 
+                {
+                    if (_chosenSC.DeviceIsMoving)
+                        _chosenSC?.Stop();
+                    else
+                        act(s,e);
+                };
             if (font != null)
                 Font = font;
 

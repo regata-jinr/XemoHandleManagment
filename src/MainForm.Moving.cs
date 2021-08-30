@@ -118,7 +118,7 @@ namespace Regata.Desktop.WinForms.XHM
             _positionTable.Controls.Add(_XPositionNumeric, 1, 0);
             _positionTable.Controls.Add(_YPositionNumeric, 1, 1);
             _positionTable.Controls.Add(_CPositionNumeric, 1, 2);
-            
+
             _speedGroupBox    = new ControlsGroupBox(new Control[] { _speedBar },      vertical: false) { Name = "speedGroupBox" };
             _positionGroupBox = new ControlsGroupBox(new Control[] { _positionTable }, vertical: false) { Name = "positionGroupBox" };
 
@@ -162,38 +162,6 @@ namespace Regata.Desktop.WinForms.XHM
                 Font = font;
 
             return n;
-        }
-
-        private async Task CheckPositionAsync()
-        {
-            while (true)
-            {
-                await Task.Delay(TimeSpan.FromSeconds(1));
-
-                if (_chosenSC == null)
-                    continue;
-                if (
-                        _chosenSC.CurrentPosition.X >= _XPositionNumeric.Minimum &&
-                        _chosenSC.CurrentPosition.X <= _XPositionNumeric.Maximum
-                    )
-                    _XPositionNumeric.Value = _chosenSC.CurrentPosition.X;
-
-                if (
-                        _chosenSC.CurrentPosition.Y >= _YPositionNumeric.Minimum &&
-                        _chosenSC.CurrentPosition.Y <= _YPositionNumeric.Maximum
-                   )
-                    _YPositionNumeric.Value = _chosenSC.CurrentPosition.Y;
-
-                if (!_chosenSC.CurrentPosition.C.HasValue) continue;
-
-                if (
-                        _chosenSC.CurrentPosition.C.Value >= _CPositionNumeric.Minimum &&
-                        _chosenSC.CurrentPosition.C.Value <= _CPositionNumeric.Maximum
-                    )
-                    _CPositionNumeric.Value = _chosenSC.CurrentPosition.C.Value;
-
-                Focus();
-            }
         }
 
 

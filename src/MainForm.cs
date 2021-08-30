@@ -61,7 +61,9 @@ namespace Regata.Desktop.WinForms.XHM
             Load += MainForm_Load;
             KeyPress += MainForm_KeyPress;
 
+            base.KeyPreview = true;
             KeyPreview = true;
+            
             Focus();
 
         }
@@ -89,9 +91,9 @@ namespace Regata.Desktop.WinForms.XHM
             }
         }
 
-        private async void MainForm_Load(object sender, System.EventArgs e)
+        private void MainForm_Load(object sender, System.EventArgs e)
         {
-            await CheckPositionAsync();
+            Focus();
         }
 
         private void _devices_CheckedChanged()
@@ -103,14 +105,14 @@ namespace Regata.Desktop.WinForms.XHM
             if (_chosenSC == null)
             {
                 _chosenSC = new SampleChanger(Device_SN[_devices.ToString()]);
-                //_chosenSC.ErrorOccurred += _chosenSC_ErrorOccurred;
+                _chosenSC.ErrorOccurred += _chosenSC_ErrorOccurred;
             }
             else
             {
-                //_chosenSC.ErrorOccurred -= _chosenSC_ErrorOccurred;
+                _chosenSC.ErrorOccurred -= _chosenSC_ErrorOccurred;
                 _chosenSC.Disconnect();
                 _chosenSC = new SampleChanger(Device_SN[_devices.ToString()]);
-                //_chosenSC.ErrorOccurred += _chosenSC_ErrorOccurred;
+                _chosenSC.ErrorOccurred += _chosenSC_ErrorOccurred;
 
             }
 
