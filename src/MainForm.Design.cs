@@ -83,7 +83,9 @@ namespace Regata.Desktop.WinForms.XHM
             this.AcceptButton = _homeButton;
             this.CancelButton = _haltButton;
             _resetButton = CreateButton("resetButton", act:  (s, e) => _chosenSC?.Reset());
-            _homeButton  = CreateButton("homeButton",  act:  (s, e) => _chosenSC?.Home());
+            _homeButton  = CreateButton("homeButton");
+
+            _homeButton.Click += _homeButton_Click;
 
             _saveButton  = CreateButton("saveButton");
             _saveButton.Click += _saveButton_Click;
@@ -99,7 +101,8 @@ namespace Regata.Desktop.WinForms.XHM
             _diskPositionNumeric.Increment = 1;
             _diskPositionNumeric.ReadOnly = false;
             _diskPositionNumeric.Controls[0].Visible = true;
-            _diskPositionNumeric.VerticalScroll.Visible = true;
+
+            _putToDiskButton.Click += _putToDiskButton_Click;
 
 
             // _saveAsComboBox
@@ -161,6 +164,22 @@ namespace Regata.Desktop.WinForms.XHM
 
         }
 
+        private void _putToDiskButton_Click(object sender, EventArgs e)
+        {
+            _chosenSC?.PutSampleToTheDisk((short)_diskPositionNumeric.Value);
+        }
+
+        private void _homeButton_Click(object sender, EventArgs e)
+        {
+            if (_chosenSC == null) return;
+            _chosenSC.Home();
+
+            while (_chosenSC.DeviceIsMoving)
+            { 
+            }
+
+        }
+
         private void _refreshCoordinatesTimer_Tick(object sender, EventArgs e)
         {
             var x = _chosenSC.CurrentPosition.X;
@@ -198,7 +217,7 @@ namespace Regata.Desktop.WinForms.XHM
 
             _selectedPositions.X = _chosenSC.CurrentPosition.X;
             _selectedPositions.Y = _chosenSC.CurrentPosition.Y;
-            _selectedPositions.C = null;
+            _selectedPositions.C = _chosenSC.CurrentPosition.C;
 
             using (var r = new RegataContext())
             {
@@ -229,13 +248,7 @@ namespace Regata.Desktop.WinForms.XHM
             b.Anchor = anc_style;
             b.AutoSize = true;
             if (act != null)
-                b.Click += (s,e) => 
-                {
-                    if (_chosenSC.DeviceIsMoving)
-                        _chosenSC?.Stop();
-                    else
-                        act(s,e);
-                };
+                b.Click += act; 
             if (font != null)
                 Font = font;
 

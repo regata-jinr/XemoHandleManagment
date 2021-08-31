@@ -9,10 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
+using Regata.Core.Hardware;
 using Regata.Core.UI.WinForms.Forms;
 using Regata.Core.UI.WinForms.Controls;
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -37,17 +38,26 @@ namespace Regata.Desktop.WinForms.XHM
         private NumericUpDown    _YPositionNumeric;
         private NumericUpDown    _CPositionNumeric;
         private ToolTip          _speedBarToolTip;
+        private NumericUpDown    _MoveToNumeric;
+
+        private IReadOnlyDictionary<int, int> _speedMode = new Dictionary<int, int>()
+        {
+            {1, 1000 },
+            {2, 5000 },
+            {3, 10000}
+        };
 
         private void InitializeMovingComponents()
         {
            
             // _speedBar
             _speedBar = new TrackBar();
-            _speedBar.Maximum = 100;
+            _speedBar.Maximum = 3;
             _speedBar.Minimum = 1;
-            _speedBar.SmallChange = 5;
-            _speedBar.LargeChange = 20;
-            _speedBar.TickFrequency = 5;
+            _speedBar.Value = 2;
+            _speedBar.SmallChange = 1;
+            _speedBar.LargeChange = 5;
+            _speedBar.TickFrequency = 1;
             _speedBar.Orientation = Orientation.Vertical;
             _speedBar.Dock = DockStyle.Fill;
             _speedBar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
@@ -70,12 +80,53 @@ namespace Regata.Desktop.WinForms.XHM
 
             var f = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
 
-            _rightButton = CreateButton("🞂", act: (s, e) => _chosenSC?.MoveRight(_speedBar.Value));
-            _leftButton  = CreateButton("🞀", act: (s, e) => _chosenSC?.MoveLeft(_speedBar.Value));
-            _upButton    = CreateButton("▲", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, act: (s, e) => _chosenSC?.MoveUp(_speedBar.Value));
-            _downButton  = CreateButton("▼", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, act: (s, e) => _chosenSC?.MoveDown(_speedBar.Value));
-            _ccwButton   = CreateButton("⟲", act: (s, e) => _chosenSC?.MoveСounterclockwise(_speedBar.Value));
-            _cwButton    = CreateButton("⟳", act: (s, e) => _chosenSC?.MoveClockwise(_speedBar.Value));
+            _rightButton = CreateButton("🞂", act: (s, e) => 
+                            MoveSC(
+                                () => _chosenSC?.MoveRight(_speedMode[_speedBar.Value]),
+                                () => _chosenSC?.MoveToX(_chosenSC.CurrentPosition.X + (int)_MoveToNumeric.Value)
+                                  )
+                                        );
+
+            _leftButton  = CreateButton("🞀", act: (s, e) => 
+                            MoveSC(
+                                ()=>  _chosenSC?.MoveLeft(_speedMode[_speedBar.Value]),
+                                () => _chosenSC?.MoveToX(_chosenSC.CurrentPosition.X - (int)_MoveToNumeric.Value)
+                                  )
+                            );
+
+            _upButton    = CreateButton("▲", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, 
+                                        act: (s, e) => 
+                            MoveSC(
+                                () => _chosenSC?.MoveUp(_speedMode[_speedBar.Value]),
+                                () => _chosenSC?.MoveToY(_chosenSC.CurrentPosition.Y + (int)                                                _MoveToNumeric.Value)
+                                  )
+                            );
+
+            _downButton  = CreateButton("▼", anc_style: AnchorStyles.Top | AnchorStyles.Bottom, 
+                act: (s, e) => 
+                            MoveSC(
+                                () => _chosenSC?.MoveDown(_speedMode[_speedBar.Value]),
+                                () => _chosenSC?.MoveToY(_chosenSC.CurrentPosition.Y - (int)
+                                                         _MoveToNumeric.Value)
+                                  )
+                            );
+
+            _ccwButton   = CreateButton("⟲", act: (s, e) => 
+                            MoveSC(
+                                () => _chosenSC?.MoveСounterclockwise(_speedMode[_speedBar.Value]),
+                                () => _chosenSC?.MoveToC(_chosenSC.CurrentPosition.C - (int)
+                                                         _MoveToNumeric.Value)
+                                  )
+                            );
+            
+            _cwButton    = CreateButton("⟳", act: (s, e) =>
+                            MoveSC(
+                                () => _chosenSC?.MoveClockwise(_speedMode[_speedBar.Value]),
+                                () => _chosenSC?.MoveToC(_chosenSC.CurrentPosition.C + (int)
+                                                         _MoveToNumeric.Value)
+                                   )
+                            );
+
 
             _movingTable.Controls.Add(_upButton,    1, 0);
             _movingTable.Controls.Add(_leftButton,  0, 1);
@@ -83,6 +134,16 @@ namespace Regata.Desktop.WinForms.XHM
             _movingTable.Controls.Add(_downButton,  1, 2);
             _movingTable.Controls.Add(_ccwButton,   0, 3);
             _movingTable.Controls.Add(_cwButton,    2, 3);
+
+            _MoveToNumeric                        = CreateNumericsUpDown("_MoveToNumeric");
+            _MoveToNumeric.ReadOnly               = false;
+            _MoveToNumeric.Maximum                = 10000;
+            _MoveToNumeric.Minimum                = 0;
+            _MoveToNumeric.Value                  = 0;
+            _MoveToNumeric.Increment              = 10;
+            _MoveToNumeric.Controls[0].Visible    = true;
+            _movingTable.Controls.Add(_MoveToNumeric, 1, 3);
+
 
             // _positionTable
             _positionTable = new TableLayoutPanel();
@@ -164,6 +225,20 @@ namespace Regata.Desktop.WinForms.XHM
             return n;
         }
 
+        private void MoveSC(Action move_speed, Action move_to_coord)
+        {
+
+            if (_chosenSC.DeviceIsMoving)
+            {
+                _chosenSC?.Stop();
+                return;
+            }
+
+            if (_MoveToNumeric.Value != 0)
+                move_to_coord();
+            else
+                move_speed();
+        }
 
     } // public partial class MainForm : RegataBaseForm
 }     // namespace Regata.Desktop.WinForms.XHM
