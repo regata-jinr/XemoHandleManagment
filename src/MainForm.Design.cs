@@ -90,7 +90,7 @@ namespace Regata.Desktop.WinForms.XHM
             _saveButton  = CreateButton("saveButton");
             _saveButton.Click += _saveButton_Click;
 
-            var f = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            var f = new Font("Microsoft Sans Serif", 14F);
 
 
             _putToDiskButton = CreateButton("putToDiskButton");
@@ -218,6 +218,8 @@ namespace Regata.Desktop.WinForms.XHM
             _selectedPositions.X = _chosenSC.CurrentPosition.X;
             _selectedPositions.Y = _chosenSC.CurrentPosition.Y;
             _selectedPositions.C = _chosenSC.CurrentPosition.C;
+            if (_selectedPositions.Name.Contains("Detector"))
+                _selectedPositions.C = null;
 
             using (var r = new RegataContext())
             {

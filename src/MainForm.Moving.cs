@@ -78,7 +78,7 @@ namespace Regata.Desktop.WinForms.XHM
             _movingTable.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             _movingTable.Dock = DockStyle.Fill;
 
-            var f = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            var f = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Point);
 
             _rightButton = CreateButton("🞂", act: (s, e) => 
                             MoveSC(
@@ -135,7 +135,7 @@ namespace Regata.Desktop.WinForms.XHM
             _movingTable.Controls.Add(_ccwButton,   0, 3);
             _movingTable.Controls.Add(_cwButton,    2, 3);
 
-            _MoveToNumeric                        = CreateNumericsUpDown("_MoveToNumeric");
+            _MoveToNumeric                        = CreateNumericsUpDown("_MoveToNumeric", font: f);
             _MoveToNumeric.ReadOnly               = false;
             _MoveToNumeric.Maximum                = 10000;
             _MoveToNumeric.Minimum                = 0;
@@ -220,7 +220,7 @@ namespace Regata.Desktop.WinForms.XHM
             n.TextAlign = HorizontalAlignment.Center;
 
             if (font != null)
-                Font = font;
+                n.Font = font;
 
             return n;
         }

@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using Regata.Core.Hardware;
+using Regata.Core.Settings;
 using Regata.Core.UI.WinForms;
 using Regata.Core.UI.WinForms.Items;
 using Regata.Core.UI.WinForms.Forms;
@@ -36,6 +37,14 @@ namespace Regata.Desktop.WinForms.XHM
 
         public MainForm() : base()
         {
+            Settings<XHMSettings>.AssemblyName = "XemoHandleManagment";
+
+            Settings<XHMSettings>.CurrentSettings.PropertyChanged += (s, e) => Labels.SetControlsLabels(this);
+
+            LangItem.CheckedChanged += () => Settings<XHMSettings>.CurrentSettings.CurrentLanguage = LangItem.CheckedItem;
+            LangItem.CheckItem(Settings<XHMSettings>.CurrentSettings.CurrentLanguage);
+
+
             base.StatusStrip.SizingGrip = false;
             Size = new Size(1200, 700);
             base.Size = Size;
@@ -51,21 +60,19 @@ namespace Regata.Desktop.WinForms.XHM
             _devices.CheckedChanged += _devices_CheckedChanged;
 
             InitializeComponent();
-            Labels.SetControlsLabels(this);
 
-            this.Name = "XemoHandleManagment";
-            base.Name = "XemoHandleManagment";
-            this.Text = "XemoHandleManagment";
-            base.Text = "XemoHandleManagment";
 
-            Load += MainForm_Load;
+            this.Name = "XemoHandleManagmentForm";
+            base.Name = "XemoHandleManagmentForm";
+            this.Text = "XemoHandleManagmentForm";
+            base.Text = "XemoHandleManagmentForm";
+
             KeyPress += MainForm_KeyPress;
 
             base.KeyPreview = true;
             KeyPreview = true;
-            
-            Focus();
 
+            Labels.SetControlsLabels(this);
         }
 
         private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
@@ -89,11 +96,6 @@ namespace Regata.Desktop.WinForms.XHM
                     _stopButton.PerformClick();
                     break;
             }
-        }
-
-        private void MainForm_Load(object sender, System.EventArgs e)
-        {
-            Focus();
         }
 
         private void _devices_CheckedChanged()
