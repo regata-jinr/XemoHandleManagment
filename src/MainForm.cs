@@ -73,6 +73,8 @@ namespace Regata.Desktop.WinForms.XHM
             KeyPreview = true;
 
             Labels.SetControlsLabels(this);
+
+            Icon = new Icon("XHMLogoCircle_1.ico");
         }
 
         private void MainForm_KeyPress(object sender, KeyPressEventArgs e)

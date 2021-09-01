@@ -4,19 +4,27 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>AnyCPU;x86</Platforms>
+    <Platforms>x86</Platforms>
+    <RootNamespace>Regata.Desktop.WinForms.XHM</RootNamespace>
+    <ApplicationIcon>XHMLogoCircle_1.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="base">
-      <HintPath>..\..\..\..\..\Core\artifacts\Debug\base\base.dll</HintPath>
+      <HintPath>..\..\..\..\..\Core\artifacts\$(Configuration)\base\base.dll</HintPath>
     </Reference>
     <Reference Include="SampleChanger">
-      <HintPath>..\..\..\..\..\Core\artifacts\Debug\SampleChanger\SampleChanger.dll</HintPath>
+      <HintPath>..\..\..\..\..\Core\artifacts\$(Configuration)\SampleChanger\SampleChanger.dll</HintPath>
     </Reference>
     <Reference Include="WinFormsTemplates">
-      <HintPath>..\..\..\..\..\Core\artifacts\Debug\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
+      <HintPath>..\..\..\..\..\Core\artifacts\$(Configuration)\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
     </Reference>
+	  
+	<None Include="D:\GoogleDrive\Job\flnp\dev\regata\Core\artifacts\$(Configuration)\base\NLog.config" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	<None Include="D:\GoogleDrive\Job\flnp\dev\regata\Core\artifacts\$(Configuration)\base\targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+	  <None Include="D:\GoogleDrive\Job\flnp\dev\regata\Core\libs\XemoDll.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	  <None Include="XHMLogoCircle_1.ico" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+
   </ItemGroup>
 
 	<ItemGroup>
