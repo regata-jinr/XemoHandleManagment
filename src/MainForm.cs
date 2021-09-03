@@ -57,10 +57,14 @@ namespace Regata.Desktop.WinForms.XHM
             _devices = new EnumItem<Devices>();
             base.MenuStrip.Items.Add(_devices.EnumMenuItem);
             base.StatusStrip.Items.Add(_devices.EnumStatusLabel);
+            _pinPosition = new ToolStripStatusLabel();
+            base.StatusStrip.Items.Add(_pinPosition);
+
+            //base.StatusStrip.Items.Add(_pinPosition.EnumStatusLabel);
+
             _devices.CheckedChanged += _devices_CheckedChanged;
 
             InitializeComponent();
-
 
             this.Name = "XemoHandleManagmentForm";
             base.Name = "XemoHandleManagmentForm";
@@ -122,10 +126,17 @@ namespace Regata.Desktop.WinForms.XHM
 
             _stateToolTip.SetToolTip(_indState, _chosenSC.Code.ToString());
 
+            _pinPosition.Text= System.Enum.GetName(_chosenSC.PinnedPosition);
+
+            _chosenSC.PositionReached += () =>
+           {
+               _pinPosition.Text = System.Enum.GetName(_chosenSC.PinnedPosition);
+
+           };
+
             _devices.EnumStatusLabel.Name = $"Device:{_devices} | ComPort:{_chosenSC.ComPort} | SN:{_chosenSC.SerialNumber} | {_chosenSC.Code}";
             Labels.SetControlsLabels(this);
             Focus();
-
 
         }
 

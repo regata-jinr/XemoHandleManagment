@@ -12,6 +12,7 @@
 using Microsoft.EntityFrameworkCore;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
+using Regata.Core.Hardware;
 using Regata.Core.UI.WinForms;
 using Regata.Core.UI.WinForms.Controls;
 using Regata.Core.UI.WinForms.Items;
@@ -52,11 +53,13 @@ namespace Regata.Desktop.WinForms.XHM
         private Button _putToDiskButton;
         private NumericUpDown _diskPositionNumeric;
 
-        private ToolTip _stateToolTip;
+        private ToolTip _stateToolTip;  
 
         private Timer _refreshCoordinatesTimer;
 
         private EnumItem<Devices> _devices;
+        //private EnumItem<PinnedPositions>
+         private ToolStripStatusLabel _pinPosition;
 
         private void InitializeComponents()
         {
@@ -78,7 +81,7 @@ namespace Regata.Desktop.WinForms.XHM
             _controlButtonsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             _controlButtonsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
 
-            _haltButton  = CreateButton("haltButton",  act:  (s, e) => _chosenSC?.HaltSystem());
+            _haltButton  = CreateButton("haltButton",  act:  (s, e) => _chosenSC?.BreakSystemProgram());
             _stopButton  = CreateButton("stopButton",  act:  (s, e) => _chosenSC?.Stop());
             this.AcceptButton = _homeButton;
             this.CancelButton = _haltButton;
@@ -145,10 +148,10 @@ namespace Regata.Desktop.WinForms.XHM
             _indState = new IndicatorControl() { Name = "IndState"     };
 
 
-            base.StatusStrip.Items.Add(new ToolStripControlHost(_indState));
-            base.StatusStrip.Items.Add(new ToolStripControlHost(_indRef));
-            base.StatusStrip.Items.Add(new ToolStripControlHost(_indPos));
-            base.StatusStrip.Items.Add(new ToolStripControlHost(_indNeg));
+            //base.StatusStrip.Items.Add(new ToolStripControlHost(_indState));
+            //base.StatusStrip.Items.Add(new ToolStripControlHost(_indRef));
+            //base.StatusStrip.Items.Add(new ToolStripControlHost(_indPos));
+            //base.StatusStrip.Items.Add(new ToolStripControlHost(_indNeg));
             
             _stateToolTip = new ToolTip();
 
@@ -164,19 +167,16 @@ namespace Regata.Desktop.WinForms.XHM
 
         }
 
-        private void _putToDiskButton_Click(object sender, EventArgs e)
+        private async void _putToDiskButton_Click(object sender, EventArgs e)
         {
-            _chosenSC?.PutSampleToTheDisk((short)_diskPositionNumeric.Value);
+            _chosenSC.IsStopped = false;
+            await _chosenSC?.PutSampleToTheDiskAsync((short)_diskPositionNumeric.Value);
         }
 
         private void _homeButton_Click(object sender, EventArgs e)
         {
             if (_chosenSC == null) return;
             _chosenSC.Home();
-
-            while (_chosenSC.DeviceIsMoving)
-            { 
-            }
 
         }
 
@@ -186,6 +186,7 @@ namespace Regata.Desktop.WinForms.XHM
             var y = _chosenSC.CurrentPosition.Y;
             var c = _chosenSC.CurrentPosition.C;
 
+            _pinPosition.Text = Enum.GetName(_chosenSC.PinnedPosition);
 
             if (_chosenSC == null)
                 return;
