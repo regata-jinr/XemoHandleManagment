@@ -46,19 +46,26 @@ namespace Regata.Desktop.WinForms.XHM
 
 
             base.StatusStrip.SizingGrip = false;
-            Size = new Size(1200, 700);
+            Size = new Size(height: 600, width: 650);
             base.Size = Size;
-            base.MinimumSize = Size;
             MinimumSize = Size;
+            base.MinimumSize = Size;
             MaximizeBox = false;
             MinimizeBox = false;
             FormBorderStyle = FormBorderStyle.FixedSingle;
 
             _devices = new EnumItem<Devices>();
-            base.MenuStrip.Items.Add(_devices.EnumMenuItem);
+            base.MenuStrip.Items.Insert(0,_devices.EnumMenuItem);
             base.StatusStrip.Items.Add(_devices.EnumStatusLabel);
             _pinPosition = new ToolStripStatusLabel();
             base.StatusStrip.Items.Add(_pinPosition);
+
+            _showDevCams = new ToolStripMenuItem();
+            _showDevCams.Name = "showDevCams";
+            _showDevCams.Click += (s, e) => SampleChanger.ShowDevicesCams();
+
+            base.MenuStrip.Items.Insert(1, _showDevCams);
+
 
             //base.StatusStrip.Items.Add(_pinPosition.EnumStatusLabel);
 
@@ -123,8 +130,6 @@ namespace Regata.Desktop.WinForms.XHM
                 _chosenSC.ErrorOccurred += _chosenSC_ErrorOccurred;
 
             }
-
-            _stateToolTip.SetToolTip(_indState, _chosenSC.Code.ToString());
 
             _pinPosition.Text= System.Enum.GetName(_chosenSC.PinnedPosition);
 

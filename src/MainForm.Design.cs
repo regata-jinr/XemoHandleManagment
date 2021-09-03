@@ -12,7 +12,6 @@
 using Microsoft.EntityFrameworkCore;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
-using Regata.Core.Hardware;
 using Regata.Core.UI.WinForms;
 using Regata.Core.UI.WinForms.Controls;
 using Regata.Core.UI.WinForms.Items;
@@ -27,10 +26,7 @@ namespace Regata.Desktop.WinForms.XHM
 {
     public partial class MainForm : RegataBaseForm
     {
-        private IndicatorControl _indRef;
-        private IndicatorControl _indPos;
-        private IndicatorControl _indNeg;
-        private IndicatorControl _indState;
+        //private IndicatorControl _indState;
 
         private TableLayoutPanel _mainTable;
         
@@ -53,13 +49,12 @@ namespace Regata.Desktop.WinForms.XHM
         private Button _putToDiskButton;
         private NumericUpDown _diskPositionNumeric;
 
-        private ToolTip _stateToolTip;  
-
         private Timer _refreshCoordinatesTimer;
 
         private EnumItem<Devices> _devices;
         //private EnumItem<PinnedPositions>
          private ToolStripStatusLabel _pinPosition;
+        private ToolStripMenuItem _showDevCams;
 
         private void InitializeComponents()
         {
@@ -141,20 +136,9 @@ namespace Regata.Desktop.WinForms.XHM
 
             _mainGroupBox = new ControlsGroupBox(new Control[] { _mainTable }, vertical: false) { Name = "mainGroupBox", Dock = DockStyle.Fill };
 
-            // indicators
-            _indRef = new IndicatorControl()   { Name = "IndRefSwitch" };
-            _indPos = new IndicatorControl()   { Name = "IndPosSwitch" };
-            _indNeg = new IndicatorControl()   { Name = "IndNegSwitch" };
-            _indState = new IndicatorControl() { Name = "IndState"     };
-
-
-            //base.StatusStrip.Items.Add(new ToolStripControlHost(_indState));
-            //base.StatusStrip.Items.Add(new ToolStripControlHost(_indRef));
-            //base.StatusStrip.Items.Add(new ToolStripControlHost(_indPos));
+            //_indState = new IndicatorControl() { Name = "IndState"     };
             //base.StatusStrip.Items.Add(new ToolStripControlHost(_indNeg));
             
-            _stateToolTip = new ToolTip();
-
             _refreshCoordinatesTimer = new Timer();
             _refreshCoordinatesTimer.Interval = 100;
             _refreshCoordinatesTimer.Tick += _refreshCoordinatesTimer_Tick;
