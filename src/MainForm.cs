@@ -46,7 +46,7 @@ namespace Regata.Desktop.WinForms.XHM
 
 
             base.StatusStrip.SizingGrip = false;
-            Size = new Size(height: 600, width: 650);
+            Size = new Size(height: 600, width: 700);
             base.Size = Size;
             MinimumSize = Size;
             base.MinimumSize = Size;
