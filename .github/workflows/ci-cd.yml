@@ -24,8 +24,8 @@ jobs:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
 
     # Build app
-    - name:  Restore the application to populate the obj folder
-      run: dotnet msbuild .\XemoHandleManagment.sln  -p:Configuration=$env:Configuration -p:OutputPath=$env:OutDir 
+    - name:  Build and publish app via ClickOnce
+      run: dotnet msbuild -p:Configuration=$env:Configuration -p:OutputPath=$env:OutDir 
       env:
         Configuration: Release
         OutDir: ~\Regata\dev\XHM
