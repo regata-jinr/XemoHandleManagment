@@ -10,8 +10,6 @@
     <ApplicationIcon>XHMLogoCircle_1.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <ARTIFACTS Condition="'$(ARTIFACTS)' == ''">..\..\..\..\..\Core\artifacts</ARTIFACTS>
-
   <ItemGroup>
     <Reference Include="base">
       <HintPath>$(ARTIFACTS)\$(Configuration)\base\base.dll</HintPath>
@@ -23,9 +21,9 @@
       <HintPath>$(ARTIFACTS)\$(Configuration)\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
     </Reference>
 
-    <None Include=$(ARTIFACTS)\$(Configuration)\base\NLog.config CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
-    <None Include=$(ARTIFACTS)\$(Configuration)\base\targets.json CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
-    <None Include=$(ARTIFACTS)\..\libs\XemoDll.dll CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <None Include="$(ARTIFACTS)\$(Configuration)\base\NLog.config" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <None Include="$(ARTIFACTS)\$(Configuration)\base\targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+    <None Include="$(ARTIFACTS)\..\libs\XemoDll.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
     <None Include="XHMLogoCircle_1.ico" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
 
   </ItemGroup>
