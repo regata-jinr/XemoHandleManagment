@@ -10,20 +10,22 @@
     <ApplicationIcon>XHMLogoCircle_1.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ARTIFACTS Condition="'$(ARTIFACTS)' == ''">..\..\..\..\..\Core\artifacts</ARTIFACTS>
+
   <ItemGroup>
     <Reference Include="base">
-      <HintPath>..\..\..\..\..\Core\artifacts\$(Configuration)\base\base.dll</HintPath>
+      <HintPath>$(ARTIFACTS)\$(Configuration)\base\base.dll</HintPath>
     </Reference>
     <Reference Include="SampleChanger">
-      <HintPath>..\..\..\..\..\Core\artifacts\$(Configuration)\SampleChanger\SampleChanger.dll</HintPath>
+      <HintPath>$(ARTIFACTS)\$(Configuration)\SampleChanger\SampleChanger.dll</HintPath>
     </Reference>
     <Reference Include="WinFormsTemplates">
-      <HintPath>..\..\..\..\..\Core\artifacts\$(Configuration)\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
+      <HintPath>$(ARTIFACTS)\$(Configuration)\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
     </Reference>
 
-    <None Include="D:\GoogleDrive\Job\flnp\dev\regata\Core\artifacts\$(Configuration)\base\NLog.config" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
-    <None Include="D:\GoogleDrive\Job\flnp\dev\regata\Core\artifacts\$(Configuration)\base\targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
-    <None Include="D:\GoogleDrive\Job\flnp\dev\regata\Core\libs\XemoDll.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <None Include=$(ARTIFACTS)\$(Configuration)\base\NLog.config CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <None Include=$(ARTIFACTS)\$(Configuration)\base\targets.json CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+    <None Include=$(ARTIFACTS)\..\libs\XemoDll.dll CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
     <None Include="XHMLogoCircle_1.ico" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
 
   </ItemGroup>
