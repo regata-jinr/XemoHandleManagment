@@ -25,7 +25,7 @@ jobs:
 
     # Build app
     - name:  Restore the application to populate the obj folder
-      run: dotnet msbuild .\XemoHandleManagment.sln  -p:Configuration=$env:Configuration;OutDir=$env:OutDir 
+      run: dotnet msbuild .\XemoHandleManagment.sln  -p:Configuration=$env:Configuration -p:OutputPath=$env:OutDir 
       env:
         Configuration: Release
         OutDir: ~\Regata\dev\XHM
