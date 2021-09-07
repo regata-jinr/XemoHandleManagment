@@ -10,6 +10,9 @@ jobs:
 
     runs-on: self-hosted
 
+    env:
+      ARTIFACTS: C:\actions-runner\apps\Core\Core\artifacts
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
