@@ -29,6 +29,6 @@ jobs:
       env:
         Configuration: Release
         OutDir: ~\Regata\dev\XHM
-        RuntimeIdentifier: win-${{ matrix.targetplatform }}
+        RuntimeIdentifier: win10-${{ matrix.targetplatform }}
 
   
