@@ -7,9 +7,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        targetplatform: [x64]
 
     runs-on: self-hosted
 
@@ -25,10 +22,8 @@ jobs:
 
     # Build app
     - name:  Build and publish app via ClickOnce
-      run: dotnet build -c $env:Configuration -o $env:OutDir -r $env:RuntimeIdentifier
+      run: dotnet build -c $env:Configuration -o $env:OutDir
       env:
         Configuration: Release
         OutDir: ~\Regata\dev\XHM
-        RuntimeIdentifier: win10-${{ matrix.targetplatform }}
-
   
