@@ -133,7 +133,7 @@ namespace Regata.Desktop.WinForms.XHM
 
             _pinPosition.Text= System.Enum.GetName(_chosenSC.PinnedPosition);
 
-            _chosenSC.PositionReached += () =>
+            _chosenSC.PositionReached += (s) =>
            {
                _pinPosition.Text = System.Enum.GetName(_chosenSC.PinnedPosition);
 

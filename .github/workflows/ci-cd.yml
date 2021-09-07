@@ -1,0 +1,124 @@
+name:  GSI CI
+
+on:
+  push:
+    branches:
+      - master
+#  pull_request:
+#    branches:
+#      - master
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        targetplatform: [x86]
+
+    runs-on: windows-latest
+
+    env:
+      App_Packages_Directory: AppPackages
+      SigningCertificate: RegataCert.pfx
+      Solution_Path: GammaSpectrumInfo.sln
+      Test_Project_Path: GSItest\GSItest.csproj
+      UI_Project_Path: GSIui\GSIui.csproj
+      Core_Project_Path: GSIcore\GSIcore.csproj
+      Wap_Project_Directory: GSIPackage
+      Wap_Project_Name: GSIPackage.wapproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+
+    # Use Nerdbank.GitVersioning to set version variables: https://github.com/AArnott/nbgv
+    - name: Use Nerdbank.GitVersioning to set version variables
+      uses: aarnott/nbgv@v0.3
+      with:
+        setAllVars: true
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.201
+
+    # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.0
+
+    # Update the version before build
+    - name: Update manifest version
+      run: |
+        [xml]$manifest = get-content ".\$env:Wap_Project_Directory\Package.appxmanifest"
+        $manifest.Package.Identity.Version = "$env:NBGV_SimpleVersion.0"
+        $manifest.save(".\$env:Wap_Project_Directory\Package.appxmanifest")
+
+    # Test
+    - name: Execute Unit Tests
+      run: dotnet test $env:Test_Project_Path
+
+    # Restore the application
+    - name:  Restore the application to populate the obj folder
+      run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration /p:RuntimeIdentifier=$env:RuntimeIdentifier
+      env:
+        Configuration: Release
+        RuntimeIdentifier: win-${{ matrix.targetplatform }}
+
+    # Decode the Base64 encoded Pfx
+    - name: Decode the Pfx
+      run: |
+        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+        $currentDirectory = Get-Location
+        $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:Wap_Project_Directory -AdditionalChildPath $env:SigningCertificate
+        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+
+    # Build the Windows Application Packaging project
+    - name: Build the Windows Application Packaging Project (wapproj)
+      run: msbuild $env:Solution_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:BuildMode /p:AppxBundle=$env:AppxBundle /p:PackageCertificateKeyFile=$env:SigningCertificate /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
+      env:
+        AppxBundle: Never
+        BuildMode: SideloadOnly
+        Configuration: Release
+        TargetPlatform: ${{ matrix.targetplatform }}
+
+        # C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x64\MakeAppx.exe pack /l /h sha256 /m D:\GoogleDrive\Job\flnp\dev\regata\GammaSpectrumInfo\GSIPackage\bin\x86\Release\ForBundle\AppxManifest.xml /f obj\x86\Release\main.map.txt /o /p D:\GoogleDrive\Job\flnp\dev\regata\GammaSpectrumInfo\GSIPackage\bin\x86\Release\GSIPackage_1.1.17.0_x86.appx
+
+    # Remove the .pfx
+    - name: Remove the .pfx
+      run: Remove-Item -path $env:Wap_Project_Directory\$env:SigningCertificate
+
+    # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
+#    - name: Upload build artifacts
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: MSIX Package
+#        path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}
+
+    # Create the release:  https://github.com/actions/create-release
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: v${{ env.NBGV_SimpleVersion }}
+        release_name: release draft
+        draft: true
+        prerelease: false
+#       body: commit message?
+    
+    # Upload release asset:   https://github.com/actions/upload-release-asset
+    - name: Update release asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}  # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}_Test\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.appx
+        asset_name: ${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.appx
+        asset_content_type: application/exe
