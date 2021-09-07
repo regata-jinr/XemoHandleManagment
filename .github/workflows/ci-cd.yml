@@ -25,7 +25,7 @@ jobs:
 
     # Build app
     - name:  Build and publish app via ClickOnce
-      run: dotnet msbuild -p:Configuration=$env:Configuration -p:OutputPath=$env:OutDir 
+      run: dotnet build -c $env:Configuration -o $env:OutDir -r $env:RuntimeIdentifier
       env:
         Configuration: Release
         OutDir: ~\Regata\dev\XHM
