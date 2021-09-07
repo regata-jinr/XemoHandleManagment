@@ -8,9 +8,6 @@
     <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
     <RootNamespace>Regata.Desktop.WinForms.XHM</RootNamespace>
     <ApplicationIcon>XHMLogoCircle_1.ico</ApplicationIcon>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>reg_keys.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
