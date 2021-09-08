@@ -234,6 +234,8 @@ namespace Regata.Desktop.WinForms.XHM
                 return;
             }
 
+            _chosenSC.IsStopped = false;
+
             if (_MoveToNumeric.Value != 0)
                 move_to_coord();
             else
