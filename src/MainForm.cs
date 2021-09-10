@@ -78,10 +78,9 @@ namespace Regata.Desktop.WinForms.XHM
             this.Text = "XemoHandleManagmentForm";
             base.Text = "XemoHandleManagmentForm";
 
-            KeyPress += MainForm_KeyPress;
-
-            base.KeyPreview = true;
-            KeyPreview = true;
+            //KeyPress += MainForm_KeyPress;
+            //base.KeyPreview = true;
+            //KeyPreview = true;
 
             Labels.SetControlsLabels(this);
 

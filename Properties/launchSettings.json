@@ -2,7 +2,7 @@
   "profiles": {
     "XemoHandleManagment": {
       "commandName": "Project",
-      "nativeDebugging": true
+      "nativeDebugging": false
     }
   }
 }
