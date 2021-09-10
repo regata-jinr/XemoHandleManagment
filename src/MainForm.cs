@@ -41,7 +41,11 @@ namespace Regata.Desktop.WinForms.XHM
 
             Settings<XHMSettings>.CurrentSettings.PropertyChanged += (s, e) => Labels.SetControlsLabels(this);
 
-            LangItem.CheckedChanged += () => Settings<XHMSettings>.CurrentSettings.CurrentLanguage = LangItem.CheckedItem;
+            LangItem.CheckedChanged += () =>
+            {
+                Settings<XHMSettings>.CurrentSettings.CurrentLanguage = LangItem.CheckedItem;
+
+            };
             LangItem.CheckItem(Settings<XHMSettings>.CurrentSettings.CurrentLanguage);
 
 
@@ -83,6 +87,9 @@ namespace Regata.Desktop.WinForms.XHM
             //KeyPreview = true;
 
             Labels.SetControlsLabels(this);
+
+            //base.Text = $"{base.Text} | {Application.ProductVersion}";
+            //this.Text = $"{this.Text} | {Application.ProductVersion}";
 
             Icon = new Icon("XHMLogoCircle_1.ico");
         }

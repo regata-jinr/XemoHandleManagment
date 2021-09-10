@@ -27,7 +27,7 @@ jobs:
 
       # Publish app
     - name:  Publish
-      run: dotnet publish -c $env:Configuration  -o $env:OutDir --self-contained true -r win10-x64
+      run: dotnet publish -c $env:Configuration  -o $env:OutDir --self-contained true -r win10-x86
       env:
         Configuration: Release
         OutDir: C:\REGATA\XHM\
