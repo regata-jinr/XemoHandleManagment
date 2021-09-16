@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Regata.Desktop.WinForms.XHM
@@ -49,7 +50,7 @@ namespace Regata.Desktop.WinForms.XHM
         private Button _putToDiskButton;
         private NumericUpDown _diskPositionNumeric;
 
-        private Timer _refreshCoordinatesTimer;
+        private System.Windows.Forms.Timer _refreshCoordinatesTimer;
 
         private EnumItem<Devices> _devices;
         //private EnumItem<PinnedPositions>
@@ -139,7 +140,7 @@ namespace Regata.Desktop.WinForms.XHM
             //_indState = new IndicatorControl() { Name = "IndState"     };
             //base.StatusStrip.Items.Add(new ToolStripControlHost(_indNeg));
             
-            _refreshCoordinatesTimer = new Timer();
+            _refreshCoordinatesTimer = new System.Windows.Forms.Timer();
             _refreshCoordinatesTimer.Interval = 100;
             _refreshCoordinatesTimer.Tick += _refreshCoordinatesTimer_Tick;
             _refreshCoordinatesTimer.Start();
@@ -154,7 +155,10 @@ namespace Regata.Desktop.WinForms.XHM
         private async void _putToDiskButton_Click(object sender, EventArgs e)
         {
             _chosenSC.IsStopped = false;
-            await _chosenSC?.PutSampleToTheDiskAsync((short)_diskPositionNumeric.Value);
+            using (var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2)))
+            {
+                await _chosenSC?.PutSampleToTheDiskAsync((short)_diskPositionNumeric.Value, ct.Token);
+            }
         }
 
         private void _homeButton_Click(object sender, EventArgs e)
@@ -166,6 +170,8 @@ namespace Regata.Desktop.WinForms.XHM
 
         private void _refreshCoordinatesTimer_Tick(object sender, EventArgs e)
         {
+            if (_chosenSC == null)
+                return;
             var x = _chosenSC.CurrentPosition.X;
             var y = _chosenSC.CurrentPosition.Y;
             var c = _chosenSC.CurrentPosition.C;

@@ -204,7 +204,7 @@ namespace Regata.Desktop.WinForms.XHM
             _speedBarToolTip.SetToolTip(_speedBar, _speedBar.Value.ToString());
             if (_chosenSC == null)
                 return;
-            _chosenSC.Settings.CVelocity = _speedBar.Value;
+            _chosenSC.CVelocity = _speedBar.Value;
         }
 
         private NumericUpDown CreateNumericsUpDown(string name, AnchorStyles anc_style = AnchorStyles.Left | AnchorStyles.Right, Font font = null)
