@@ -1,48 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>x86</Platforms>
-    <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
-    <RootNamespace>Regata.Desktop.WinForms.XHM</RootNamespace>
-    <ApplicationIcon>XHMLogoCircle_1.ico</ApplicationIcon>
+	<OutputType>WinExe</OutputType>
+	<TargetFramework>net5.0-windows</TargetFramework>
+	<UseWindowsForms>true</UseWindowsForms>
+	<Platforms>x86</Platforms>
+	<RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
+	<RootNamespace>Regata.Desktop.WinForms.XHM</RootNamespace>
+	<ApplicationIcon>XHMLogoCircle_1.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="base">
-      <HintPath>$(ARTIFACTS)\$(Configuration)\base\base.dll</HintPath>
-    </Reference>
-    <Reference Include="SampleChanger">
-      <HintPath>$(ARTIFACTS)\$(Configuration)\SampleChanger\SampleChanger.dll</HintPath>
-    </Reference>
-    <Reference Include="WinFormsTemplates">
-      <HintPath>$(ARTIFACTS)\$(Configuration)\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
-    </Reference>
+	<Reference Include="base">
+	  <HintPath>$(ARTIFACTS)\$(Configuration)\base\base.dll</HintPath>
+	</Reference>
+	<Reference Include="SampleChanger">
+	  <HintPath>$(ARTIFACTS)\$(Configuration)\SampleChanger\SampleChanger.dll</HintPath>
+	</Reference>
+	<Reference Include="WinFormsTemplates">
+	  <HintPath>$(ARTIFACTS)\$(Configuration)\WinFormsTemplates\WinFormsTemplates.dll</HintPath>
+	</Reference>
 
-    <None Include="$(ARTIFACTS)\$(Configuration)\base\NLog.config" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
-    <None Include="$(ARTIFACTS)\$(Configuration)\base\targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
-    <None Include="$(ARTIFACTS)\..\libs\XemoDll.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
-    <None Include="XHMLogoCircle_1.ico" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	<None Include="$(ARTIFACTS)\$(Configuration)\base\NLog.config" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	<None Include="$(ARTIFACTS)\$(Configuration)\base\targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+	<None Include="$(ARTIFACTS)\..\libs\XemoDll.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	<None Include="labels.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	<None Include="XHMLogoCircle_1.ico" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
 
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="NLog" Version="4.7.10" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	<PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+	<PackageReference Include="NLog" Version="4.7.10" />
+	<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="src\MainForm.Moving.cs">
-      <SubType>Form</SubType>
-    </Compile>
+	<Compile Update="src\MainForm.Moving.cs">
+	  <SubType>Form</SubType>
+	</Compile>
   </ItemGroup>
 
 
