@@ -66,7 +66,7 @@ namespace Regata.Desktop.WinForms.XHM
 
             _showDevCams = new ToolStripMenuItem();
             _showDevCams.Name = "showDevCams";
-            _showDevCams.Click += (s, e) => SampleChanger.ShowDevicesCams();
+            _showDevCams.Click += (s, e) => Regata.Core.Shell.ShowXemoDevicesCams();
 
             base.MenuStrip.Items.Insert(1, _showDevCams);
 
