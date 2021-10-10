@@ -1,109 +1,111 @@
-,
-{
+[
+
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "haltButton",
     "RusText": "Принуд. останов.",
     "EngText": "Hard stop"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "stopButton",
     "RusText": "Остановить",
     "EngText": "Stop"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "resetButton",
     "RusText": "Сброс",
     "EngText": "Reset"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "homeButton",
     "RusText": "Реф. запуск",
     "EngText": "Reference run"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "saveButton",
     "RusText": "Сохранить поз.",
     "EngText": "Save pos."
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "controlGroupBox",
     "RusText": "Управление осями",
     "EngText": "Axes controls"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "positionGroupBox",
     "RusText": "Координаты",
     "EngText": "Position"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "_devicesMenuItem",
     "RusText": "Устройства",
     "EngText": "Devices"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "buttonsGroupBox",
     "RusText": "Управление устройством",
     "EngText": "Device controls"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "putToDiskButton",
     "RusText": "Поставить на диск",
     "EngText": "Put to the disk"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "speedGroupBox",
     "RusText": "Скорость",
     "EngText": "Speed"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "XemoHandleManagmentForm",
     "RusText": "Ручное управление XEMO",
     "EngText": "Xemo handle managment"
-},
-{
+  },
+  {
     "FormName": "GSAMainForm",
     "ComponentName": "AcquisitionModesItems",
     "RusText": "Режим набора спектра",
     "EngText": "Acquisition Mode"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "LanguageMenuItem",
     "RusText": "Language",
     "EngText": "Language"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "English",
     "RusText": "English",
     "EngText": "English"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "Russian",
     "RusText": "Russian",
     "EngText": "Russian"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "DevicesMenuItem",
     "RusText": "Устройства",
     "EngText": "Devices"
-},
-{
+  },
+  {
     "FormName": "XemoHandleManagmentForm",
     "ComponentName": "showDevCams",
     "RusText": "Камеры УСО",
     "EngText": "SC cams"
-}
+  }
+]
